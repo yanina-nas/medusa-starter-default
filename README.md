@@ -1,155 +1,106 @@
 <p align="center">
   <a href="https://www.medusa-commerce.com">
-    <img alt="Medusa" src="https://i.imgur.com/USubGVY.png" width="100" />
+    <img alt="Medusa" src="https://user-images.githubusercontent.com/7554214/129161578-19b83dc8-fac5-4520-bd48-53cba676edd2.png" width="100" />
   </a>
 </p>
 <h1 align="center">
-  Medusa Starter Default
+  Medusa Slack Bot example
 </h1>
 <p align="center">
-This repo provides the skeleton to get you started with using <a href="https://github.com/medusajs/medusa">Medusa</a>. Follow the steps below to get ready.
+Medusa starter with integrated Slack</a>
 </p>
 <p align="center">
-  <a href="https://github.com/medusajs/medusa/blob/master/LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="Medusa is released under the MIT license." />
-  </a>
-  <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-  <a href="https://discord.gg/xpCwq3Kfn8">
-    <img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Discord Chat" />
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
-    <img src="https://img.shields.io/twitter/follow/medusajs.svg?label=Follow%20@medusajs" alt="Follow @medusajs" />
-  </a>
   <p align="center">
-    <a href="https://heroku.com/deploy?template=https://github.com/medusajs/medusa-starter-default/tree/feat/deploy-heroku">
+    <a href="https://heroku.com/deploy?template=https://github.com/yanina-nas/medusa-starter-default/tree/feat/deploy-heroku">
       <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
     </a>
   </p>
 </p>
 
-## Prerequisites
+## Medusa Slack Bot 
+![Medusa Slack bot cover image](./cover.png)
 
-This starter has minimal prerequisites and most of these will usually already be installed on your computer.
 
-- [Install Node.js](https://nodejs.org/en/download/)
-- [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
-- [Install SQLite](https://www.sqlite.org/download.html)
+### Demo Link
 
-## Setting up your store
+For demo purposes this submission was deployed to Heroku.
+To see it in action, you can use the following commands:
 
-- Install the Medusa CLI
-  ```
-  npm install -g @medusajs/medusa
-  yarn global add @medusajs/medusa
-  ```
-- Create a new Medusa project
-  ```
-  medusa new my-medusa-store
-  ```
-- Run your project
-  ```
-  cd my-medusa-store
-  medusa develop
-  ```
+- Get product information by product handle:
+`curl -d "text=hoodie" -X POST https://medusa-slack-bot.herokuapp.com/slack/product_by_handle`
+Parameter: product handle
 
-Your local Medusa server is now running on port **9000**.
+- Get product feed:
+`curl -d "text=2 2" -X POST https://medusa-slack-bot.herokuapp.com/slack/products`
+Parameters: offset and limit (default offset=0 and limit=10)
 
-### Seeding your Medusa store
 
----
+ To see how it looks in Slack, copy the output and paste it to [Slack Block Kit Builder](https://app.slack.com/block-kit-builder)
 
-To seed your medusa store run the following command:
 
-```
-medusa seed -f ./data/seed.json
-```
+Or you can create a new Slack bot and add the following slash command - endpoint pairs to get exactly same functionality as seen in this demo.
+Slash command | Request URL | Description
+--- | --- | ---
+/medusa/product | https://medusa-slack-bot.herokuapp.com/slack/product_by_handle | Returns data for a particular product
+/medusa | https://medusa-slack-bot.herokuapp.com/start | Quickstart guide
+/medusa/total | https://medusa-slack-bot.herokuapp.com/slack/products/total | Display the total number of products
+/medusa/products | https://medusa-slack-bot.herokuapp.com/slack/products | Returns product feed, by default limited by 10 items. Provide limit and offset to get a particular range.
 
-This command seeds your database with some sample data to get you started, including a store, an administrator account, a region and a product with variants. What the data looks like precisely you can see in the `./data/seed.json` file.
 
-## Setting up your store with Docker
+### About
 
-- Install the Medusa CLI
-  ```
-  npm install -g @medusajs/medusa-cli
-  ```
-- Create a new Medusa project
-  ```
-  medusa new my-medusa-store
-  ```
-- Update project config in `medusa-config.js`:
+### Participants
 
-  ```
-  module.exports = {
-    projectConfig: {
-      redis_url: REDIS_URL,
-      database_url: DATABASE_URL, //postgres connectionstring
-      database_type: "postgres",
-      store_cors: STORE_CORS,
-      admin_cors: ADMIN_CORS,
-    },
-    plugins,
-  };
-  ```
+- GitHub: [yanina-nas](https://github.com/yanina-nas)
+- Twitter: [@AnastasiiaIani1](https://twitter.com/AnastasiiaIani1)
+- Discord: yanina-nas#5541
+### Description
 
-- Run your project
+This example demonstrates how you can connect your Medusa store to Slack workspace by creating a bot application. Functionality of this demo includes querying your shop's data from your Slack chat and displaying detailed information in a user-friendly fashion about a product from your store by a product handle. This was implemented by creating a few custom endpoints in a Medusa backend, transforming product data received by produt service, and sending it back to be consumed by Slack.
 
-  When running your project the first time `docker compose` should be run with the `build` flag to build your container locally:
+### Preview
 
-  ```
-  docker-compose up --build
-  ```
+<img src="./demo.webp">
 
-  When running your project subsequent times you can run docker compose with no flags to spin up your local environment in seconds:
+Product feed:
 
-  ```
-  docker-compose up
-  ```
+<img src="./demo-app-1.png" width="400">
 
-Your local Medusa server is now running on port **9000**.
+Product overview:
 
-### Seeding your Medusa store with Docker
+<img src="./demo-app-2.png" width="400">
 
----
+After setting up your API in a Medusa backend, your endpoints can be added to a Slack app and configured as shown below:
 
-To add seed data to your medusa store running with Docker, run this command in a seperate terminal:
+Overview: 
 
-```
-docker exec medusa-server medusa seed -f ./data/seed.json
-```
+<img src="./slack-app-1.png" width="400">
 
-This will execute the previously described seed script in the running `medusa-server` Docker container.
+Slash command example setup:
 
-## Try it out
+<img src="./slack-app-2.png" width="400">
 
-```
-curl -X GET localhost:9000/store/products | python -m json.tool
-```
+## Set up Project
 
-After the seed script has run you will have the following things in you database:
+To run this project please follow the steps listed below.
 
-- a User with the email: admin@medusa-test.com and password: supersecret
-- a Region called Default Region with the countries GB, DE, DK, SE, FR, ES, IT
-- a Shipping Option called Standard Shipping which costs 10 EUR
-- a Product called Cool Test Product with 4 Product Variants that all cost 19.50 EUR
+### Prerequisites
 
-Visit [docs.medusa-commerce.com](https://docs.medusa-commerce.com) for further guides.
+- Heroku account
+- Slack account & workspace
 
-<p>
-  <a href="https://www.medusa-commerce.com">
-    Website
-  </a> 
-  |
-  <a href="https://medusajs.notion.site/medusajs/Medusa-Home-3485f8605d834a07949b17d1a9f7eafd">
-    Notion Home
-  </a>
-  |
-  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
-    Twitter
-  </a>
-  |
-  <a href="https://docs.medusa-commerce.com">
-    Docs
-  </a>
-</p>
+### Install Project
+
+- Press the `Deploy to Heroku` button (at the top of this readme)
+    - It'll deploy a heroku application with addons for redis and postgres.
+- Run `npm run seed` to seed example data.
+- Create a Slack app (option `from scratch`).
+    - Enable `Slash Commands` feature for your app.
+    - Add aforementioned commands to it.
+    - Add your app to your Slack workspace.
+## Resources
+
+- [Deploy to Heroku branch of Medusa default starter repo](https://github.com/medusajs/medusa-starter-default/tree/feat/deploy-heroku)
+- [Medusa Services](https://docs.medusajs.com/advanced/backend/services/create-service) (like [productService](https://docs.medusajs.com/references/services/classes/ProductService))
+- [Medusa Endpoints](https://docs.medusajs.com/advanced/backend/endpoints/add)
+- [Slack Slash Commands](https://api.slack.com/interactivity/slash-commands)
